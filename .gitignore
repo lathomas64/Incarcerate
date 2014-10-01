@@ -1,2 +1,10 @@
 *.dll
+Library/shadercompiler-1.log
+Temp/*
 Library/ScriptAssemblies/Assembly-CSharp-Editor.dll
+Library/ScriptAssemblies/Assembly-CSharp-Editor.dll.mdb
+Library/ScriptAssemblies/Assembly-CSharp.dll
+Library/ScriptAssemblies/Assembly-CSharp.dll.mdb
+Library/ScriptAssemblies/Assembly-UnityScript.dll
+Library/ScriptAssemblies/Assembly-UnityScript.dll.mdb
+Library/shadercompiler-1.log
