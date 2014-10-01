@@ -9,6 +9,8 @@ public class GameLoop : MonoBehaviour {
     public UILabel GuardsLabel;
     public UIButton ArrestButton;
     public UIButton CellBlockButton;
+    public UILabel EventLabel;
+
 
     public decimal MONEY_PER_PRISONER = 0.5m;
     public int PRISONERS_PER_CELLBLOCK = 10;
@@ -39,8 +41,9 @@ public class GameLoop : MonoBehaviour {
         if (cellBlocks < 1)
             cellBlocks = 1;
         InvokeRepeating("Save", 10, 10);
+        InvokeRepeating("randomEvent", 5, 60);
 	}
-
+    
     private void Save()
     {
         PlayerPrefs.SetInt("rookies", rookies);
@@ -110,6 +113,9 @@ public class GameLoop : MonoBehaviour {
         updateLabels();
 	}
 
+    /// <summary>
+    /// callback for arrest button
+    /// </summary>
     public void Arrest()
     {
         if(!ArrestButton.isEnabled)
@@ -124,6 +130,9 @@ public class GameLoop : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// callback for the work button
+    /// </summary>
     public void Work()
     {
         //Debug.Log("money before work" + money);
@@ -135,7 +144,7 @@ public class GameLoop : MonoBehaviour {
         }
         updateLabels();
     }
-
+    
     public void BuildCellBlock()
     {
         money = money - nextCellBlockCost();
@@ -172,4 +181,42 @@ public class GameLoop : MonoBehaviour {
     {
         return (decimal) (CELL_BLOCK_BASE_COST * Mathf.Pow(1.15f, (float)cellBlocks));
     }
+
+    private void randomEvent()
+    {
+        Debug.Log("random event check happened");
+        float riotChance = prisoners * .05f - guards * .2f;
+        riotChance = Mathf.Max(.01f, riotChance);
+        Debug.Log("Riot chance:" + riotChance);
+        if(Random.Range(0f,1f) <riotChance)
+        {
+            prisonRiot();
+        }
+    }
+
+    #region Random Event 
+
+    private void clearEventText()
+    {
+        EventLabel.text = "";
+    }
+
+    /// <summary>
+    /// riot random event
+    /// once this event occurs we lose 1-20% of guards(round up) and 1-25% of prisoners(round up)
+    /// </summary>
+    private void prisonRiot()
+    {
+        Debug.Log("Prison riot runs");
+        int guardLosses = Mathf.Max(1, ((int) (Random.Range(.01f, .2f) * guards)));
+        int prisonerLosses = ((int)(Random.Range(.05f, .25f) * prisoners));
+        Debug.Log("minimum prisoner loss:" + .05f * prisoners);
+        prisoners -= prisonerLosses;
+        guards -= guardLosses;
+        EventLabel.text = "A Riot broke out:\n" + guardLosses + " guards killed\n" + prisonerLosses + " prisoners killed.";
+        Debug.Log(EventLabel.text);
+        Invoke("clearEventText", 10);
+    }
+
+    #endregion
 }
