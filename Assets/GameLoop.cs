@@ -31,7 +31,26 @@ public class GameLoop : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         CellBlockButton.isEnabled = false;
+        rookies = PlayerPrefs.GetInt("rookies");
+        guards = PlayerPrefs.GetInt("guards");
+        money = (decimal)PlayerPrefs.GetFloat("money");
+        prisoners = PlayerPrefs.GetInt("prisoners");
+        cellBlocks = PlayerPrefs.GetInt("cellblocks");
+        if (cellBlocks < 1)
+            cellBlocks = 1;
+        InvokeRepeating("Save", 10, 10);
 	}
+
+    private void Save()
+    {
+        PlayerPrefs.SetInt("rookies", rookies);
+        PlayerPrefs.SetInt("guards", guards);
+        PlayerPrefs.SetInt("prisoners", prisoners);
+        PlayerPrefs.SetFloat("money", (float) money);
+        PlayerPrefs.SetInt("cellblocks", cellBlocks);
+        PlayerPrefs.Save();
+        Debug.Log("Autosave...");
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -55,8 +74,8 @@ public class GameLoop : MonoBehaviour {
             {
                 guardSalary = (decimal)(Time.deltaTime * GUARD_BASE_COST * Mathf.Pow(1.15f, (float)guards));
             }
-            Debug.Log("Rookie salary:"+rookieSalary);
-            Debug.Log("Guard salary:"+guardSalary);
+            //Debug.Log("Rookie salary:"+rookieSalary);
+            //Debug.Log("Guard salary:"+guardSalary);
 
             if (money >= guardSalary)
             {
@@ -107,9 +126,9 @@ public class GameLoop : MonoBehaviour {
 
     public void Work()
     {
-        Debug.Log("money before work" + money);
+        //Debug.Log("money before work" + money);
         money += MONEY_PER_PRISONER * prisoners;
-        Debug.Log("money after work" + money);
+        //Debug.Log("money after work" + money);
         if(money >= nextCellBlockCost())
         {
             CellBlockButton.isEnabled = true;
