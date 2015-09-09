@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameLoop : MonoBehaviour {
 
-    public UILabel PrisonerLabel;
-    public UILabel MoneyLabel;
-    public UILabel PoliceForceLabel;
-    public UILabel GuardsLabel;
-    public UIButton ArrestButton;
-    public UIButton CellBlockButton;
-    public UILabel EventLabel;
+    public Text PrisonerLabel;
+    public Text MoneyLabel;
+    public Text PoliceForceLabel;
+    public Text GuardsLabel;
+    public Button ArrestButton;
+    public Button CellBlockButton;
+    public Text EventLabel;
 
 
     public decimal MONEY_PER_PRISONER = 0.5m;
@@ -28,11 +29,13 @@ public class GameLoop : MonoBehaviour {
 
     private float nextArrest = 0;
     private float nextWorkShift = 0;
+
+	private IncrementalGame.Resource[] resources;
    
 
 	// Use this for initialization
 	void Start () {
-        CellBlockButton.isEnabled = false;
+        CellBlockButton.interactable = false;
         rookies = PlayerPrefs.GetInt("rookies");
         guards = PlayerPrefs.GetInt("guards");
         money = (decimal)PlayerPrefs.GetFloat("money");
@@ -41,7 +44,7 @@ public class GameLoop : MonoBehaviour {
         if (cellBlocks < 1)
             cellBlocks = 1;
         InvokeRepeating("Save", 10, 10);
-        InvokeRepeating("randomEvent", 5, 60);
+        InvokeRepeating("randomEvent", 60, 60);
 	}
     
     private void Save()
@@ -56,7 +59,7 @@ public class GameLoop : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () {        
 	    if(money > 0 && (guards > 0 || rookies > 0))
         {
             decimal rookieSalary;
@@ -111,6 +114,7 @@ public class GameLoop : MonoBehaviour {
             }
         }
         updateLabels();
+        updateButtons();
 	}
 
     /// <summary>
@@ -118,7 +122,7 @@ public class GameLoop : MonoBehaviour {
     /// </summary>
     public void Arrest()
     {
-        if(!ArrestButton.isEnabled)
+        if(!ArrestButton.interactable)
         {
             return;
         }
@@ -126,7 +130,7 @@ public class GameLoop : MonoBehaviour {
         updateLabels();
         if(prisoners >= cellBlocks * PRISONERS_PER_CELLBLOCK)
         {
-            ArrestButton.isEnabled = false;
+            ArrestButton.interactable = false;
         }
     }
 
@@ -140,7 +144,7 @@ public class GameLoop : MonoBehaviour {
         //Debug.Log("money after work" + money);
         if(money >= nextCellBlockCost())
         {
-            CellBlockButton.isEnabled = true;
+            CellBlockButton.interactable = true;
         }
         updateLabels();
     }
@@ -148,11 +152,11 @@ public class GameLoop : MonoBehaviour {
     public void BuildCellBlock()
     {
         money = money - nextCellBlockCost();
-        ArrestButton.isEnabled = true;
+        ArrestButton.interactable = true;
         cellBlocks++;
         if(money < nextCellBlockCost())
         {
-            CellBlockButton.isEnabled = false;
+            CellBlockButton.interactable = false;
         }
         updateLabels();
     }
@@ -175,6 +179,12 @@ public class GameLoop : MonoBehaviour {
         MoneyLabel.text = "Money:$" + money.ToString("F2");
         PoliceForceLabel.text = "Police Force:\nYou\nRookies:" + rookies;
         GuardsLabel.text = "Guards:" + guards;
+    }
+
+    private void updateButtons()
+    {
+        ArrestButton.interactable = prisoners < PRISONERS_PER_CELLBLOCK * cellBlocks;
+        CellBlockButton.interactable = nextCellBlockCost() <= money;
     }
 
     private decimal nextCellBlockCost()
@@ -210,6 +220,8 @@ public class GameLoop : MonoBehaviour {
         Debug.Log("Prison riot runs");
         int guardLosses = Mathf.Max(1, ((int) (Random.Range(.01f, .2f) * guards)));
         int prisonerLosses = ((int)(Random.Range(.05f, .25f) * prisoners));
+        guardLosses = Mathf.Min(guardLosses, guards);
+        prisonerLosses = Mathf.Min(prisonerLosses, prisoners);
         Debug.Log("minimum prisoner loss:" + .05f * prisoners);
         prisoners -= prisonerLosses;
         guards -= guardLosses;

@@ -5,8 +5,6 @@ Project("{0ED09C26-D591-3001-4809-8819CF5D60EA}") = "Incarcerate", "Assembly-CSh
 EndProject
 Project("{0ED09C26-D591-3001-4809-8819CF5D60EA}") = "Incarcerate", "Assembly-CSharp-Editor.csproj", "{045E4E56-216C-B7F8-4947-1E27AF02CDE8}"
 EndProject
-Project("{0ED09C26-D591-3001-4809-8819CF5D60EA}") = "Incarcerate", "Assembly-UnityScript.unityproj", "{BBCA9FD2-0F28-0FD9-98E8-ACE02824CCB3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,15 +19,11 @@ Global
 		{045E4E56-216C-B7F8-4947-1E27AF02CDE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{045E4E56-216C-B7F8-4947-1E27AF02CDE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{045E4E56-216C-B7F8-4947-1E27AF02CDE8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BBCA9FD2-0F28-0FD9-98E8-ACE02824CCB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BBCA9FD2-0F28-0FD9-98E8-ACE02824CCB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BBCA9FD2-0F28-0FD9-98E8-ACE02824CCB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BBCA9FD2-0F28-0FD9-98E8-ACE02824CCB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-																GlobalSection(MonoDevelopProperties) = preSolution
+																																																		GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1

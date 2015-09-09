@@ -1,0 +1,18 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Events.cs">
+    <Files>
+      <File FileName="Assets\GameLoop.cs" Line="3" Column="1" />
+      <File FileName="Assets\Resource.cs" Line="5" Column="1" />
+      <File FileName="Assets\Editor.cs" Line="1" Column="1" />
+      <File FileName="Assets\Button.cs" Line="1" Column="1" />
+      <File FileName="Assets\Prisoner.cs" Line="13" Column="27" />
+      <File FileName="Assets\Person.cs" Line="12" Column="3" />
+      <File FileName="Assets\Events.cs" Line="14" Column="4" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

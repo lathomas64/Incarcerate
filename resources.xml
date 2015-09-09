@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfResource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Resource>
+    <name>test</name>
+    <capacity>3</capacity>
+  </Resource>
+  <Resource>
+    <name>catnip</name>
+    <capacity>5000</capacity>
+  </Resource>
+  <Resource>
+    <name>parsnip</name>
+    <capacity>5000</capacity>
+  </Resource>
+</ArrayOfResource>
