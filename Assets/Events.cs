@@ -7,15 +7,19 @@ using UnityEngine.Analytics;
 public class Events : MonoBehaviour {
 
 	public GameObject EventPanel;
+    public GameObject PrisonerView;
+    public GameObject PrisonerButtonPrefab;
 	public Text EventText;
 	public List<Prisoner> population;
 	public Queue<string> queuedEvents;
 	public Dictionary<string,GameObject> buttons;
 	public float SECONDS_PER_TICK;
+    private float next_tick;
 	//private float 
 
 	// Use this for initialization
 	void Start () {
+        next_tick = SECONDS_PER_TICK;
 		population = new List<Prisoner> ();
 		queuedEvents = new Queue<string> ();
 		buttons = new Dictionary<string,GameObject > ();
@@ -31,25 +35,46 @@ public class Events : MonoBehaviour {
 			string eventText = queuedEvents.Dequeue();
 			ShowEvent(eventText);
 		}
+        next_tick -= Time.deltaTime;
+        if (next_tick <= 0)
+        {
+            simulation_tick();
+            next_tick = SECONDS_PER_TICK;
+        }
+	}
+
+    private void simulation_tick()
+    {
         List<Prisoner> released = new List<Prisoner>();
-		foreach (Prisoner p in population) {
-			p.Tick ();
-            if(p.SentenceOver())
+        foreach (Prisoner p in population)
+        {
+            p.Tick();
+            if (p.SentenceOver())
             {
                 released.Add(p);
             }
-		}
-        foreach(Prisoner p in released)
+        }
+        foreach (Prisoner p in released)
         {
             population.Remove(p);
             QueueEvent("Prisoner " + p.name + " has served their sentence and has been released.");
         }
-	}
+    }
 
 	public void Arrest()
 	{
 		Prisoner inmate = new Prisoner ();
 		population.Add (inmate);
+        GameObject newButtonObject = (GameObject)Instantiate(PrisonerButtonPrefab);
+        newButtonObject.transform.SetParent(PrisonerView.transform);
+        newButtonObject.transform.localPosition = new Vector3(80, -30 * population.Count, 0);
+        newButtonObject.name = inmate.name;
+        Button newButton = newButtonObject.GetComponent<Button>();
+        Text newButtonText = newButtonObject.GetComponentInChildren<Text>();
+        newButtonText.text = inmate.name;
+        newButton.onClick.AddListener(() => ShowEvent(inmate.ToString()));
+
+        PrisonerView.AddComponent<Button>();
 		ShowEvent("New Prisoner #:"+population.Count+inmate.ToString());
 		if (population.Count == 5) {
 			Debug.Log ("5 prisoners");
