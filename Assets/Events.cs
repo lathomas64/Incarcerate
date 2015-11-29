@@ -15,6 +15,7 @@ public class Events : MonoBehaviour {
 	public Dictionary<string,GameObject> buttons;
 	public float SECONDS_PER_TICK;
     private float next_tick;
+    private bool leasing_unlock = false;
 	//private float 
 
 	// Use this for initialization
@@ -57,6 +58,8 @@ public class Events : MonoBehaviour {
         foreach (Prisoner p in released)
         {
             population.Remove(p);
+            GameObject button = GameObject.Find(p.name);
+            button.SetActive(false);
             QueueEvent("Prisoner " + p.name + " has served their sentence and has been released.");
         }
     }
@@ -72,16 +75,17 @@ public class Events : MonoBehaviour {
         Button newButton = newButtonObject.GetComponent<Button>();
         Text newButtonText = newButtonObject.GetComponentInChildren<Text>();
         newButtonText.text = inmate.name;
-        newButton.onClick.AddListener(() => ShowEvent(inmate.ToString()));
+        newButton.onClick.AddListener(() => ShowPrisoner(inmate));
 
         PrisonerView.AddComponent<Button>();
 		ShowEvent("New Prisoner #:"+population.Count+inmate.ToString());
-		if (population.Count == 5) {
+		if (!leasing_unlock && population.Count >= 5) {
 			Debug.Log ("5 prisoners");
 			GameObject leaseButton;
 			buttons.TryGetValue("Lease", out leaseButton);
 			leaseButton.SetActive(true);
 			queuedEvents.Enqueue("Convict Leasing unlock text goes here");
+            leasing_unlock = true;
             Analytics.CustomEvent("unlock", new Dictionary<string, object>
               {
                 { "target", "Convict Leasing" }
@@ -109,5 +113,10 @@ public class Events : MonoBehaviour {
     public void QueueEvent(string eventInfo)
     {
         queuedEvents.Enqueue(eventInfo);
+    }
+
+    private void ShowPrisoner(Prisoner inmate)
+    {
+        ShowEvent(inmate.ToString());
     }
 }
