@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Prisoner : Person {
 	protected int sentence_months;
+    public bool leased;
 
 	public Prisoner(){
 		sentence_months = Random.Range (1, 1200);

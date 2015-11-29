@@ -16,6 +16,8 @@ public class Events : MonoBehaviour {
 	public float SECONDS_PER_TICK;
     private float next_tick;
     private bool leasing_unlock = false;
+    private int cash = 0;
+    public Text StatusText;
 	//private float 
 
 	// Use this for initialization
@@ -50,10 +52,17 @@ public class Events : MonoBehaviour {
         foreach (Prisoner p in population)
         {
             p.Tick();
+            if(p.leased)
+            {
+                cash++;
+                StatusText.text = "$" + cash;
+                Debug.Log("$" + cash);
+            }
             if (p.SentenceOver())
             {
                 released.Add(p);
             }
+            
         }
         foreach (Prisoner p in released)
         {
@@ -118,5 +127,20 @@ public class Events : MonoBehaviour {
     private void ShowPrisoner(Prisoner inmate)
     {
         ShowEvent(inmate.ToString());
+        if(leasing_unlock)
+        {
+            GameObject newButtonObject = (GameObject)Instantiate(PrisonerButtonPrefab);
+            newButtonObject.transform.SetParent(EventPanel.transform);
+
+            newButtonObject.transform.localPosition = new Vector3(0, 0, 0);
+            newButtonObject.name = "Lease "+inmate.name;
+            Button newButton = newButtonObject.GetComponent<Button>();
+            Text newButtonText = newButtonObject.GetComponentInChildren<Text>();
+            newButtonText.text = "Lease " + inmate.name;
+            newButton.onClick.AddListener(() => inmate.leased = true);
+
+        }
     }
+
+ //private void Lease(Prisoner )
 }
